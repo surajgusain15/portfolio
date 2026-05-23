@@ -1,0 +1,71 @@
+---
+title: "Cost Optimization Initiative"
+subtitle: "php artisan optimize:memory"
+description: "Identified and eliminated critical memory leaks, reducing memory consumption from 42GB to 1.5GB and saving $35K/month in infrastructure costs."
+tags: ["Laravel", "Performance", "MySQL", "AWS RDS", "Optimization"]
+order: 2
+metrics:
+  - label: "Memory Reduction"
+    value: "96.4%"
+  - label: "Monthly Savings"
+    value: "$35K"
+  - label: "Infra Cost Drop"
+    value: "83%"
+---
+
+## The Problem
+
+The production environment was consuming **42GB of memory** on the primary application servers. Infrastructure costs were running at **$42,000/month** and growing linearly with user acquisition. The system would periodically run out of memory and need restarts.
+
+## Root Cause Analysis
+
+### Memory Leak #1: Unbounded Query Results
+
+The reports module was loading entire datasets into memory before processing:
+
+```php
+// Before: loads ALL records into memory
+$transactions = Transaction::where('status', 'pending')->get();
+foreach ($transactions as $txn) {
+    // process...
+}
+```
+
+The `get()` call was pulling hundreds of thousands of records into PHP's memory space at once.
+
+### Memory Leak #2: Inefficient Caching Strategy
+
+The caching layer was storing serialized objects without TTL limits or size caps. Over time, cache entries accumulated until they consumed gigabytes of memory.
+
+### Memory Leak #3: Connection Pool Exhaustion
+
+Database connections weren't being released properly in long-running queue workers, causing connection handle buildup.
+
+## The Fix
+
+### Cursor-Based Pagination
+
+```php
+// After: processes one record at a time
+foreach (Transaction::where('status', 'pending')->cursor() as $txn) {
+    // process — only one record in memory at a time
+}
+```
+
+Laravel's `cursor()` uses yield-based iteration. Memory usage stays flat regardless of dataset size.
+
+### Cache Eviction Strategy
+
+Implemented LRU eviction with max-size caps per cache namespace. Stale entries older than 24 hours are automatically pruned.
+
+### Connection Management
+
+Added proper connection release in queue worker lifecycle hooks. Connections are now returned to the pool after each job.
+
+## Results
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Memory Usage | 42 GB | 1.5 GB | **96.4%** |
+| Monthly Cost | $42,000 | $7,000 | **83%** |
+| Outages/month | 3–4 | 0 | **100%** |

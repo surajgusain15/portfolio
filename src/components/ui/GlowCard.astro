@@ -1,0 +1,50 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<div
+  class:list={["relative rounded-xl transition-all duration-300", className]}
+  data-glow-card
+>
+  <slot />
+</div>
+
+<script>
+  document.querySelectorAll("[data-glow-card]").forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty("--mouse-x", `${x}px`);
+      card.style.setProperty("--mouse-y", `${y}px`);
+    });
+  });
+</script>
+
+<style>
+  [data-glow-card] {
+    position: relative;
+  }
+
+  [data-glow-card]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(167, 139, 250, 0.06),
+      transparent 50%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  [data-glow-card]:hover::before {
+    opacity: 1;
+  }
+</style>

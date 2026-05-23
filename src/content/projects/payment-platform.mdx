@@ -1,0 +1,57 @@
+---
+title: "Payment Platform"
+subtitle: "php artisan payment:process"
+description: "Multi-vendor payment processing platform handling settlements across 12+ payment gateways with async SQS-backed processing."
+tags: ["PHP", "Laravel", "AWS", "SQS", "Microservices"]
+order: 1
+metrics:
+  - label: "Vendors Integrated"
+    value: "12+"
+  - label: "Settlement Rate"
+    value: "10k+/min"
+  - label: "Tech Stack"
+    value: "Laravel + AWS"
+---
+
+## Architecture
+
+The payment platform is a microservices-based system handling end-to-end payment lifecycle:
+
+- **Payment Gateway Layer** — Abstracted integration for 12+ vendor payment APIs
+- **Order Service** — Manages order lifecycle: create → authorize → capture → settle → reconcile
+- **Settlement Worker** — SQS-backed async processor for batch settlements
+- **Notification Service** — SNS-based push for payment status webhooks
+
+## Key Design Decisions
+
+### Why SQS over Synchronous Processing
+
+Payments can't be lost. SQS gives us durable message storage with exactly-once delivery semantics. If a settlement fails, it stays in the DLQ for manual reconciliation instead of being silently dropped.
+
+### Vendor Abstraction Pattern
+
+```php
+interface PaymentGateway {
+    public function authorize(float $amount, array $metadata): AuthorizationResponse;
+    public function capture(string $transactionId): CaptureResponse;
+    public function refund(string $transactionId, float $amount): RefundResponse;
+    public function settle(): SettlementReport;
+}
+```
+
+Each vendor implements this interface. The core business logic never touches vendor-specific code — it only works against the interface. Adding a new vendor means writing one class.
+
+### Async Settlement Flow
+
+```
+Order Captured → SQS Message Enqueued → Worker Picks Up
+→ Batch Settlements → Reconciliation Report → Notify on Completion
+```
+
+This decouples the payment capture from settlement timing. The merchant gets instant confirmation; the settlement happens in background batches.
+
+## Results
+
+- **12+ payment vendors** integrated under a common abstraction
+- **10k+ transactions/minute** processed through SQS-backed async settlement
+- **Seamless vendor swaps** — adding or replacing a gateway requires zero core changes

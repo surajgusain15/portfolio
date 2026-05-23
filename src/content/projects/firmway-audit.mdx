@@ -1,0 +1,73 @@
+---
+title: "Firmway Audit Application"
+subtitle: "php artisan serve --port=8080"
+description: "Full-featured audit management platform with multi-level org hierarchy, role-based access control, dynamic email templates, and serverless deployment."
+tags: ["Laravel", "MySQL", "AWS Lambda", "RBAC", "Serverless"]
+order: 3
+metrics:
+  - label: "Org Levels"
+    value: "4"
+  - label: "Email Templates"
+    value: "12"
+  - label: "Concurrent Users"
+    value: "200+"
+---
+
+## Overview
+
+Firmway is a comprehensive audit management application built for enterprise compliance teams. The platform handles the complete audit lifecycle — from registration and planning through execution and reporting.
+
+## Key Features
+
+### Multi-Level Organization Hierarchy
+
+The org structure supports 4 levels of nesting: parent organization → child organization → branch → user. Each level inherits or overrides permissions from its parent.
+
+```php
+// Organization tree traversal
+$org = Organization::with('children.branches.users')->find($rootId);
+// Access control propagates down the hierarchy
+$user->hasPermission('audit.create', $org->childId); // true if parent grants it
+```
+
+### Role-Based Access Control
+
+Four distinct roles with granular permissions:
+
+| Role | Permissions |
+|------|-------------|
+| Super Admin | Full system access, configuration, all reports |
+| Manager | Create audits, assign reviewers, approve reports |
+| Reviewer | Execute audits, submit findings, suggest remediation |
+| Auditor | View assigned audits, submit timesheets |
+
+### Dynamic Email Templating Engine
+
+12 configurable templates with variable injection:
+
+```blade
+Subject: Audit #[audit_id] - [status] by [reviewer_name]
+
+Body:
+Dear [assignee_name],
+
+Audit #[audit_id] has been [status] by [reviewer_name].
+Please review the findings at your earliest convenience.
+
+[action_required ? "Action needed by [due_date]" : "No action required"]
+```
+
+Templates support conditional blocks, variable interpolation, and per-org customization.
+
+## Architecture
+
+- **Backend**: Laravel with service-oriented architecture
+- **Database**: MySQL with optimized indexes for hierarchical queries
+- **Deployment**: AWS Lambda + RDS for auto-scaling
+- **Email**: SES-based delivery with template caching
+
+## Results
+
+- **200+ concurrent users** across multiple enterprise clients
+- **12 dynamic email templates** reducing support tickets by 60%
+- **Zero-downtime deployments** via Lambda's built-in versioning

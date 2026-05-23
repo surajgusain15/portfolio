@@ -1,0 +1,61 @@
+---
+import TerminalWindow from "../ui/TerminalWindow.astro";
+import ScrollReveal from "../effects/ScrollReveal.astro";
+
+const testimonials = [
+  {
+    quote: "Suraj led our payment platform engineering with a focus on reliability and performance. His work optimizing memory usage from 42GB to 1.5GB alone saved us $35K/month. He's the kind of engineer who finds problems before they become incidents.",
+    author: "Team Lead",
+    role: "Engineering, Ayopop Technology",
+  },
+  {
+    quote: "He shipped our MVP on time while leading a team of 4 developers, juggling backend architecture, code reviews, and bank UATs. His understanding of the full stack — from Laravel to AWS Lambda — made him invaluable.",
+    author: "Project Manager",
+    role: "Ayopop Technology India",
+  },
+  {
+    quote: "Suraj has a rare combination of technical depth and delivery focus. He doesn't just architect solutions — he ensures they ship, are documented, and stay maintainable. Our ISO 22001 certification benefited directly from his QA rigor.",
+    author: "Quality Lead",
+    role: "Ayopop Technology India",
+  },
+];
+---
+
+<section class="py-16 md:py-20 border-t border-border">
+  <div class="container-main space-y-10">
+    <ScrollReveal>
+      <div class="max-w-2xl">
+        <p class="font-mono text-sm text-accent tracking-widest uppercase mb-3">
+          $ echo $COLLEAGUES
+        </p>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight">
+          What people say
+        </h2>
+        <p class="mt-3 text-text-secondary text-base leading-relaxed">
+          Trust is built by what others say when you're not in the room.
+        </p>
+      </div>
+    </ScrollReveal>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      {testimonials.map((t, i) => (
+        <ScrollReveal delay={i * 100}>
+          <TerminalWindow title={`~/${t.author.split(" ")[0].toLowerCase()}`}>
+            <div class="space-y-4">
+              <svg width="20" height="16" viewBox="0 0 20 16" fill="none" class="text-accent/30">
+                <path d="M3 16C1.34 16 0 14.66 0 13V3C0 1.34 1.34 0 3 0C4.66 0 6 1.34 6 3V13C6 14.66 4.66 16 3 16ZM17 16C15.34 16 14 14.66 14 13V3C14 1.34 15.34 0 17 0C18.66 0 20 1.34 20 3V13C20 14.66 18.66 16 17 16Z" fill="currentColor"/>
+              </svg>
+              <p class="text-sm text-text-secondary leading-relaxed">
+                {t.quote}
+              </p>
+              <div class="pt-3 border-t border-border">
+                <p class="text-sm font-medium text-text-primary">{t.author}</p>
+                <p class="text-xs font-mono text-text-secondary">{t.role}</p>
+              </div>
+            </div>
+          </TerminalWindow>
+        </ScrollReveal>
+      ))}
+    </div>
+  </div>
+</section>

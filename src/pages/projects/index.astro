@@ -1,0 +1,71 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navigation from "../../components/shared/Navigation.astro";
+import Footer from "../../components/shared/Footer.astro";
+import ScrollReveal from "../../components/effects/ScrollReveal.astro";
+import TerminalWindow from "../../components/ui/TerminalWindow.astro";
+import GlowCard from "../../components/ui/GlowCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+projects.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+const slug = (id: string) => id.replace(/\.mdx$/, "");
+---
+
+<Layout>
+  <Navigation />
+  <main id="main-content" class="pt-24 pb-16">
+    <div class="container-main space-y-16">
+      <ScrollReveal>
+        <div class="max-w-2xl">
+          <p class="font-mono text-sm text-accent tracking-widest uppercase mb-4">
+            ./projects --detail
+          </p>
+          <h1 class="text-3xl md:text-5xl font-bold tracking-tight">
+            Case Studies
+          </h1>
+          <p class="mt-4 text-text-secondary text-lg leading-relaxed">
+            Deep dives into architecture decisions, tradeoffs, and results.
+          </p>
+        </div>
+      </ScrollReveal>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        {projects.map((project, i) => (
+          <ScrollReveal delay={i * 100}>
+            <a href={`/projects/${slug(project.id)}`} class="block group">
+              <GlowCard>
+                <TerminalWindow title={project.data.subtitle}>
+                  <p class="text-[0.8125rem] text-text-primary font-medium mb-2">
+                    {project.data.title}
+                  </p>
+                  <p class="text-sm text-text-secondary leading-relaxed mb-4">
+                    {project.data.description}
+                  </p>
+                  {project.data.metrics && (
+                    <div class="flex gap-4 mb-4">
+                      {project.data.metrics.map((m) => (
+                        <div>
+                          <p class="font-accent text-sm text-accent">{m.value}</p>
+                          <p class="text-[0.625rem] text-text-secondary font-mono">{m.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div class="flex flex-wrap gap-2 pt-4 border-t border-border">
+                    {project.data.tags.map((tag) => (
+                      <span class="px-2 py-1 text-[0.6875rem] font-mono bg-surface/50 text-text-secondary rounded">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </TerminalWindow>
+              </GlowCard>
+            </a>
+          </ScrollReveal>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

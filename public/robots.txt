@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://suraj.io/sitemap-index.xml

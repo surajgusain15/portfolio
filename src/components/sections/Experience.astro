@@ -1,0 +1,111 @@
+---
+import ScrollReveal from "../effects/ScrollReveal.astro";
+
+const roles = [
+  {
+    company: "Ayopop Technology India Pvt. Ltd.",
+    role: "Principal Software Engineer",
+    period: "Feb 2019 — Present",
+    description:
+      "Leading full-stack development of digital payment solutions. Architecting microservices, optimizing system performance, and driving cost savings across the platform.",
+    highlights: [
+      "Achieved $35,000/month cost savings by optimizing code, reducing memory usage from 42GB to 1.5GB, and fixing memory leaks",
+      "Built MVP as Lead Developer, led a 4-member team, and supported ISO 22001 certification",
+      "Created POCs for circuit-breakers, optimized log-aggregators, and integrated vendor payment APIs",
+      "Conducted code reviews, performed Bank UATs, and contributed to system design planning",
+    ],
+  },
+  {
+    company: "Eastern Enterprises (formerly Ansh Systems)",
+    role: "Lead Developer",
+    period: "Aug 2018 — Feb 2019",
+    description:
+      "Led development of Yii-based web projects, ensuring timely delivery and technical excellence across the full development lifecycle.",
+    highlights: [
+      "Spearheaded multiple Yii-based website projects from comprehension through development to deployment",
+      "Led a team of 7 developers, significantly enhancing overall team output and efficiency",
+      "Innovated an Alexa-powered Asana task teller, demonstrating technical creativity",
+    ],
+  },
+  {
+    company: "D.J. Alexander Software LLP",
+    role: "Developer",
+    period: "Sep 2017 — May 2018",
+    description:
+      "Contributed technical expertise to modernize legacy systems and enhance team capabilities in a collaborative environment.",
+    highlights: [
+      "Revitalized a legacy application by establishing novel user setups to modernize its functionality",
+      "Implemented OAuth2 via JWT within a SOAP architecture and reconstructed APIs for efficiency and security",
+      "Created static pages aligned with design specs and aided DevOps team in customizing CI/CD pipeline",
+    ],
+  },
+  {
+    company: "Envisiodevs Private Limited",
+    role: "Production Engineer",
+    period: "Apr 2016 — Aug 2017",
+    description:
+      "Developed web projects using Laravel and serverless technologies. Built user-facing dashboards and audit applications.",
+    highlights: [
+      "Developed multiple web projects using Laravel and Google App Scripts for serverless Intranet websites",
+      "Built user dashboard for 'Rinse-n-spin' laundry service app presenting vital metrics through charts",
+      "Contributed to gym equipment sales app 'Fitindo' — user profiles, transactions, branch coordination",
+      "Engineered features for audit app 'Firmway' — Registration, Org Structure, Email Templating, Role & Permissions",
+    ],
+  },
+];
+---
+
+<section id="experience" class="py-16 md:py-20 scroll-mt-16">
+  <div class="container-main space-y-10">
+    <ScrollReveal>
+      <div class="max-w-2xl">
+        <p class="font-mono text-sm text-accent tracking-widest uppercase mb-3">
+          $ cat experience.log
+        </p>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight">
+          Where I've worked
+        </h2>
+        <p class="mt-3 text-text-secondary text-base leading-relaxed">
+          Building production systems at scale. Every role, a deep technical challenge.
+        </p>
+      </div>
+    </ScrollReveal>
+
+    <div class="space-y-6">
+      {roles.map((role, i) => (
+        <ScrollReveal delay={i * 120}>
+          <div class="group relative pl-8 md:pl-10">
+            {/* Timeline line */}
+            <div class="absolute left-0 top-0 bottom-0 w-px bg-border group-last:bg-gradient-to-b group-last:from-border group-last:to-transparent" />
+
+            {/* Timeline dot */}
+            <div class="absolute left-[-4px] top-1 w-[9px] h-[9px] rounded-full border-2 border-accent bg-bg" />
+
+            <div class="p-5 rounded-xl border border-border bg-surface/20 hover:bg-surface/30 transition-all duration-300">
+              <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+                <div>
+                  <h3 class="text-lg font-semibold text-text-primary">{role.company}</h3>
+                  <p class="font-mono text-sm text-accent">{role.role}</p>
+                </div>
+                <span class="font-mono text-xs text-text-secondary">{role.period}</span>
+              </div>
+
+              <p class="text-text-secondary text-sm leading-relaxed mb-4">
+                {role.description}
+              </p>
+
+              <ul class="space-y-2">
+                {role.highlights.map((h) => (
+                  <li class="flex gap-3 text-sm text-text-secondary">
+                    <span class="text-accent-alt mt-1 shrink-0">▹</span>
+                    <span>{h}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </ScrollReveal>
+      ))}
+    </div>
+  </div>
+</section>

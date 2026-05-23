@@ -1,0 +1,147 @@
+---
+import TerminalWindow from "../ui/TerminalWindow.astro";
+import GlowCard from "../ui/GlowCard.astro";
+
+const projects = [
+  {
+    title: "Payment Platform",
+    subtitle: "php artisan payment:process",
+    tags: ["PHP", "Laravel", "AWS", "Microservices"],
+    lines: [
+      { prefix: "$", text: "vendor/bin/phpunit tests/Payment/ProcessorTest.php", delay: 0 },
+      { prefix: ">", text: "Testing payment gateway integration (12 vendors)...", delay: 250 },
+      { prefix: "✓", text: "Vendor API: Razorpay — 200 OK | latency: 210ms", color: "text-accent-alt", delay: 550 },
+      { prefix: "✓", text: "Vendor API: PayU — 200 OK | latency: 185ms", color: "text-accent-alt", delay: 850 },
+      { prefix: ">", text: "Payment lifecycle: create → authorize → capture → settle", delay: 1150 },
+      { prefix: "✓", text: "SQS-backed async settlement: 10k+ txns/min", color: "text-highlight", delay: 1550 },
+    ],
+  },
+  {
+    title: "Cost Optimization Engine",
+    subtitle: "php artisan optimize:memory",
+    tags: ["Laravel", "Performance", "AWS RDS"],
+    lines: [
+      { prefix: "$", text: "memory_usage: 42GB — analyzing heap...", delay: 0 },
+      { prefix: ">", text: "Leak detected: unbounded query results in report module", delay: 300 },
+      { prefix: ">", text: "Fix: cursor-based pagination + chunked processing", delay: 600 },
+      { prefix: "✓", text: "Memory: 42GB → 1.5GB (96.4% reduction)", color: "text-accent-alt", delay: 1000 },
+      { prefix: "$", text: "Monthly infrastructure cost: $42,000 → $7,000", delay: 1300 },
+      { prefix: "✓", text: "Savings: $35,000/month | before: after → 83% reduction", color: "text-highlight", delay: 1700 },
+    ],
+  },
+  {
+    title: "Firmway Audit Application",
+    subtitle: "php artisan serve --port=8080",
+    tags: ["Laravel", "MySQL", "AWS Lambda"],
+    lines: [
+      { prefix: "$", text: "php artisan make:model Audit --all", delay: 0 },
+      { prefix: ">", text: "Generating Registration module with role-based access...", delay: 250 },
+      { prefix: "✓", text: "Org hierarchy: parent → child → branch → user (4 levels)", color: "text-accent-alt", delay: 600 },
+      { prefix: "✓", text: "Email templating engine: 12 templates, dynamic variables", color: "text-accent-alt", delay: 950 },
+      { prefix: "✓", text: "Admin RBAC: super-admin → manager → reviewer → auditor", color: "text-accent-alt", delay: 1250 },
+      { prefix: "✓", text: "Deployed: Lambda + RDS | serving 200+ concurrent users", color: "text-highlight", delay: 1650 },
+    ],
+  },
+  {
+    title: "API Security Modernization",
+    subtitle: "composer require jwt-auth",
+    tags: ["Symfony", "OAuth2", "JWT", "AWS"],
+    lines: [
+      { prefix: "$", text: "git checkout -b feature/oauth2-migration", delay: 0 },
+      { prefix: ">", text: "Analyzing legacy SOAP endpoints (23 services)...", delay: 250 },
+      { prefix: "✓", text: "SOAP → REST: 12 endpoints rebuilt with JSON schemas", color: "text-accent-alt", delay: 650 },
+      { prefix: "✓", text: "OAuth2 via JWT: access_token (15min) + refresh_token (7d)", color: "text-accent-alt", delay: 1050 },
+      { prefix: ">", text: "CI/CD pipeline: CodePipeline → Lambda deploy → smoke test", delay: 1400 },
+      { prefix: "✓", text: "P99 latency improved: 2.4s → 340ms | Security: OWASP Top 10", color: "text-highlight", delay: 1800 },
+    ],
+  },
+];
+---
+
+<section id="projects" class="py-16 md:py-20">
+  <div class="container-main space-y-10">
+    <div class="max-w-2xl">
+      <p class="font-mono text-sm text-accent tracking-widest uppercase mb-3">
+        ./projects
+      </p>
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight">
+        Things I've shipped
+      </h2>
+      <p class="mt-3 text-text-secondary text-base leading-relaxed">
+        Production systems and open-source experiments. Each project is a
+        terminal session — because that's where the real work happens.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      {projects.map((project, i) => (
+        <GlowCard>
+          <TerminalWindow title={project.subtitle}>
+            <p class="text-[0.8125rem] text-text-primary font-medium mb-3">
+              {project.title}
+            </p>
+            <div data-terminal-lines data-animate-delay={i * 300}>
+              {project.lines.map((line) => (
+                <div class="flex gap-2" data-terminal-line data-delay={line.delay}>
+                  <span class="text-text-secondary shrink-0">
+                    {line.prefix === "$" ? "$" : line.prefix === "✓" ? "✓" : ">"}
+                  </span>
+                  <span class:list={[line.color ?? "text-text-secondary"]}>
+                    {line.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-border">
+              {project.tags.map((tag) => (
+                <span class="px-2 py-1 text-[0.6875rem] font-mono bg-surface/50 text-text-secondary rounded">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </TerminalWindow>
+        </GlowCard>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  [data-terminal-line] {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-terminal-line].visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  const terminalObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const container = entry.target;
+          const lines = container.querySelectorAll("[data-terminal-line]");
+          const baseDelay = parseInt(container.dataset.animateDelay ?? "0", 10);
+          lines.forEach((line) => {
+            const lineDelay = parseInt(line.dataset.delay ?? "0", 10);
+            setTimeout(() => {
+              line.classList.add("visible");
+            }, baseDelay + lineDelay);
+          });
+          terminalObserver.unobserve(container);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+
+  document.querySelectorAll("[data-terminal-lines]").forEach((el) => {
+    terminalObserver.observe(el);
+  });
+</script>

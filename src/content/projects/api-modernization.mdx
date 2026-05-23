@@ -1,0 +1,99 @@
+---
+title: "API Security Modernization"
+subtitle: "composer require jwt-auth"
+description: "Migrated legacy SOAP-based APIs to REST with OAuth2/JWT authentication, reducing latency by 85% and eliminating a decade of technical debt."
+tags: ["Symfony", "OAuth2", "JWT", "AWS Lambda", "CI/CD"]
+order: 4
+metrics:
+  - label: "Endpoints Modernized"
+    value: "12"
+  - label: "Latency Improvement"
+    value: "86%"
+  - label: "Security Standard"
+    value: "OAuth2"
+---
+
+## The Challenge
+
+A legacy SOAP-based API architecture with 23 services was becoming a bottleneck:
+
+- **High latency**: Average response time of 2.4 seconds
+- **Tight coupling**: SOAP's rigid contract made changes risky and slow
+- **No modern auth**: Basic authentication with shared secrets
+- **Difficult to test**: SOAP envelopes were complex to construct and validate
+
+## Migration Strategy
+
+### Phase 1: API Audit & Classification
+
+Catalogued all 23 SOAP services and classified them:
+
+| Priority | Count | Criteria |
+|----------|-------|----------|
+| P0 | 8 | Customer-facing, high traffic |
+| P1 | 4 | Internal, medium traffic |
+| P2 | 11 | Admin/internal, low traffic |
+
+### Phase 2: RESTful Redesign
+
+Each SOAP endpoint was mapped to a RESTful equivalent:
+
+```xml
+<!-- SOAP Request (Before) -->
+<soap:Envelope>
+  <soap:Body>
+    <GetUserDetails>
+      <UserId>12345</UserId>
+      <AuthenticationToken>shared_secret</AuthenticationToken>
+    </GetUserDetails>
+  </soap:Body>
+</soap:Envelope>
+```
+
+```http
+// REST + JWT (After)
+GET /api/v2/users/12345
+Authorization: Bearer eyJhbGciOi...
+```
+
+### Phase 3: OAuth2 Implementation
+
+Implemented OAuth2 authorization code flow with JWT tokens:
+
+```
+POST /oauth/token
+grant_type=authorization_code&code=abc123&redirect_uri=/callback
+
+Response:
+{
+  "access_token": "eyJ...",       // 15-minute TTL
+  "refresh_token": "def456",      // 7-day TTL
+  "token_type": "Bearer",
+  "expires_in": 900
+}
+```
+
+JWT payload includes:
+- `sub` — User identifier
+- `roles` — Scoped permissions (audit:read, payment:write)
+- `iat`/`exp` — Issued/expiry timestamps
+- `jti` — Unique token ID for revocation
+
+### Phase 4: CI/CD Pipeline
+
+Built a complete deployment pipeline on AWS:
+
+```
+Git Push → CodePipeline → Build → Lambda Deploy → Smoke Tests
+                           ↓
+                    Security Scan (OWASP ZAP)
+                           ↓
+                    Production Deploy (Canary)
+```
+
+## Results
+
+- **12 endpoints** modernized from SOAP to REST
+- **P99 latency improved**: 2.4s → 340ms (**86% faster**)
+- **OAuth2 with JWT**: industry-standard security, auditable token lifecycle
+- **CI/CD pipeline**: automated deployments with built-in security scanning

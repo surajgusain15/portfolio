@@ -1,0 +1,161 @@
+---
+import "../index.css";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  ogType?: string;
+  ogImage?: string;
+  breadcrumbs?: { name: string; path: string }[];
+}
+
+const {
+  title = "Suraj Gusain — Principal Software Engineer",
+  description = "Principal Software Engineer with 8+ years in full-stack development, fintech, cloud architecture, and system optimization. PHP, Golang, Node.js, AWS.",
+  ogType = "website",
+  ogImage = "/images/og.svg",
+  breadcrumbs,
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const siteUrl = (Astro.site?.href ?? "https://suraj.io/").replace(/\/?$/, "/");
+const siteName = "Suraj Gusain";
+const rp = (path: string) => `${base}${path.replace(/^\//, "")}`;
+const ogImageUrl = ogImage.startsWith("http") ? ogImage : `${siteUrl.replace(/\/$/, "")}${rp(ogImage)}`;
+const canonicalUrl = Astro.url.pathname === "/" ? siteUrl.replace(/\/$/, "") : `${siteUrl.replace(/\/$/, "")}${Astro.url.pathname}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href={rp("favicon.svg")} />
+    <link rel="icon" type="image/png" sizes="32x32" href={rp("favicon-32.png")} />
+    <link rel="icon" type="image/png" sizes="16x16" href={rp("favicon-16.png")} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="en_IN" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <meta name="theme-color" content="#0A0A0B" />
+
+    <link rel="preload" href={rp("fonts/instrument-sans-latin.woff2")} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={rp("fonts/jetbrains-mono-latin.woff2")} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={rp("fonts/ibm-plex-mono-400-latin.woff2")} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={rp("fonts/ibm-plex-mono-500-latin.woff2")} as="font" type="font/woff2" crossorigin />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Suraj Gusain",
+      "jobTitle": "Principal Software Engineer",
+      "description": "Principal Software Engineer with 8+ years in full-stack development, fintech, cloud architecture, and system optimization.",
+      "url": siteUrl,
+      "email": "suraj.gusain15@gmail.com",
+      "sameAs": [
+        "https://github.com/surajgusain",
+        "https://linkedin.com/in/surajgusain",
+      ],
+      "knowsAbout": ["PHP", "Golang", "Node.js", "Laravel", "Fintech", "Microservices", "AWS", "System Optimization"],
+      "alumniOf": ["Ayopop Technology India", "Eastern Enterprises", "D.J. Alexander Software LLP", "Envisiodevs Private Limited"],
+    })} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": siteName,
+      "url": siteUrl,
+      "description": "Principal Software Engineer with 8+ years in full-stack development, fintech, cloud architecture, and system optimization. PHP, Golang, Node.js, AWS.",
+      "author": { "@type": "Person", "name": "Suraj Gusain" },
+    })} />
+
+    {breadcrumbs && breadcrumbs.length > 0 && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbs.map((crumb, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "name": crumb.name,
+          "item": crumb.path.startsWith("http") ? crumb.path : `${siteUrl.replace(/\/$/, "")}${base.replace(/\/$/, "")}${crumb.path}`,
+        })),
+      })} />
+    )}
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": title,
+      "description": description,
+      "url": canonicalUrl,
+      "author": { "@type": "Person", "name": "Suraj Gusain" },
+    })} />
+  </head>
+  <body>
+    <div id="scroll-progress" aria-hidden="true" />
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-bg focus:rounded-lg focus:outline-none"
+    >
+      Skip to content
+    </a>
+    <slot />
+    <a
+      id="back-to-top"
+      href="#"
+      aria-label="Back to top"
+      class="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+    </a>
+
+    <script>
+      // Scroll progress
+      const progress = document.getElementById("scroll-progress");
+      if (progress) {
+        window.addEventListener("scroll", () => {
+          const h = document.documentElement.scrollHeight - window.innerHeight;
+          progress.style.width = `${(window.scrollY / h) * 100}%`;
+        });
+      }
+
+      // Back to top
+      const backBtn = document.getElementById("back-to-top");
+      if (backBtn) {
+        window.addEventListener("scroll", () => {
+          backBtn.classList.toggle("visible", window.scrollY > 600);
+        });
+        backBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      // Reduced motion check
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      if (prefersReducedMotion.matches) {
+        document.querySelectorAll("[data-animate]").forEach((el) => {
+          el.style.animation = "none";
+          el.style.opacity = "1";
+        });
+      }
+    </script>
+  </body>
+</html>

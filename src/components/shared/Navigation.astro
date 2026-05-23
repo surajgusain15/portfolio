@@ -1,0 +1,119 @@
+---
+const links = [
+  { href: "/projects", label: "Projects" },
+  { href: "/#stack", label: "Stack" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#contact", label: "Contact" },
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50" data-nav>
+  <div class="absolute inset-0 bg-bg/80 backdrop-blur-xl border-b border-border/50" />
+
+  <div class="container-main relative flex items-center justify-between h-16">
+    <a href="/" class="font-mono text-sm text-text-primary hover:text-accent transition-colors">
+      ~/suraj
+    </a>
+
+    <div class="hidden md:flex items-center gap-8">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class="font-mono text-sm text-text-secondary hover:text-text-primary transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="/#contact"
+        class="px-4 py-1.5 font-mono text-xs text-bg bg-accent rounded-md hover:brightness-110 transition-all"
+      >
+        Hire me
+      </a>
+    </div>
+
+    <button class="md:hidden p-2 text-text-secondary hover:text-text-primary z-50" aria-label="Open menu" data-menu-toggle>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" data-menu-icon>
+        <path d="M3 5h14M3 10h14M3 15h14" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile drawer overlay -->
+  <div class="fixed inset-0 bg-bg/60 backdrop-blur-sm hidden z-40" data-drawer-overlay />
+
+  <!-- Mobile drawer -->
+  <div class="fixed top-0 right-0 h-full w-72 bg-surface border-l border-border transform translate-x-full transition-transform duration-300 ease-out z-40 hidden" data-mobile-drawer>
+    <div class="flex flex-col pt-24 px-8 space-y-6">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class="font-mono text-lg text-text-secondary hover:text-text-primary transition-colors"
+          data-menu-close
+        >
+          {link.label}
+        </a>
+      ))}
+      <hr class="border-border" />
+      <a
+        href="/#contact"
+        class="px-6 py-3 bg-accent text-bg font-semibold rounded-lg text-center hover:brightness-110 transition-all"
+        data-menu-close
+      >
+        Hire me
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const nav = document.querySelector("[data-nav]");
+  const toggle = document.querySelector("[data-menu-toggle]");
+  const drawer = document.querySelector("[data-mobile-drawer]");
+  const overlay = document.querySelector("[data-drawer-overlay]");
+  const closeLinks = document.querySelectorAll("[data-menu-close]");
+  const menuIcon = document.querySelector("[data-menu-icon]");
+  let lastScroll = 0;
+
+  function openDrawer() {
+    drawer?.classList.remove("hidden", "translate-x-full");
+    drawer?.classList.add("translate-x-0");
+    overlay?.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    menuIcon?.setAttribute("d", "M6 6l12 12M18 6l-12 12");
+  }
+
+  function closeDrawer() {
+    drawer?.classList.remove("translate-x-0");
+    drawer?.classList.add("translate-x-full");
+    overlay?.classList.add("hidden");
+    document.body.style.overflow = "";
+    setTimeout(() => drawer?.classList.add("hidden"), 300);
+    menuIcon?.setAttribute("d", "M3 5h14M3 10h14M3 15h14");
+  }
+
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.scrollY;
+    if (currentScroll > lastScroll && currentScroll > 80) {
+      nav.style.transform = "translateY(-100%)";
+    } else {
+      nav.style.transform = "translateY(0)";
+    }
+    lastScroll = currentScroll;
+  });
+
+  toggle?.addEventListener("click", () => {
+    if (drawer?.classList.contains("hidden")) {
+      drawer?.classList.remove("hidden");
+      requestAnimationFrame(openDrawer);
+    } else {
+      closeDrawer();
+    }
+  });
+
+  overlay?.addEventListener("click", closeDrawer);
+
+  closeLinks?.forEach((link) => {
+    link.addEventListener("click", closeDrawer);
+  });
+</script>

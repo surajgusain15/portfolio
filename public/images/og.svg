@@ -1,0 +1,36 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0A0A0B"/>
+  <rect x="60" y="60" width="1080" height="510" rx="16" fill="none" stroke="#1E1E24" stroke-width="1"/>
+
+  <!-- System graph nodes -->
+  <g opacity="0.3">
+    <circle cx="300" cy="315" r="40" fill="none" stroke="#A78BFA" stroke-width="2"/>
+    <text x="300" y="320" text-anchor="middle" fill="#A78BFA" font-family="monospace" font-size="16" font-weight="600">Go</text>
+    <circle cx="500" cy="250" r="45" fill="none" stroke="#34D399" stroke-width="2"/>
+    <text x="500" y="255" text-anchor="middle" fill="#34D399" font-family="monospace" font-size="14" font-weight="600">K8s</text>
+    <circle cx="700" cy="315" r="35" fill="none" stroke="#A78BFA" stroke-width="2"/>
+    <text x="700" y="320" text-anchor="middle" fill="#A78BFA" font-family="monospace" font-size="14" font-weight="600">AI</text>
+    <circle cx="900" cy="250" r="30" fill="none" stroke="#FBBF24" stroke-width="2"/>
+    <text x="900" y="255" text-anchor="middle" fill="#FBBF24" font-family="monospace" font-size="12" font-weight="600">DB</text>
+
+    <line x1="340" y1="305" x2="455" y2="265" stroke="#A78BFA" stroke-width="1.5" opacity="0.4"/>
+    <line x1="545" y1="265" x2="665" y2="305" stroke="#34D399" stroke-width="1.5" opacity="0.4"/>
+    <line x1="735" y1="305" x2="870" y2="265" stroke="#A78BFA" stroke-width="1.5" opacity="0.4"/>
+  </g>
+
+  <!-- Grid pattern -->
+  <g stroke="#1E1E24" stroke-width="0.5" opacity="0.2">
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+  </g>
+
+  <!-- Brand -->
+  <text x="1200" y="630" text-anchor="end" font-family="'SF Mono', Monaco, 'Cascadia Code', monospace" font-size="20" fill="#8B8B93" transform="translate(-60, -60)">suraj.io</text>
+
+  <!-- Title -->
+  <text x="120" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="700" fill="#F5F5F7" letter-spacing="-2">Suraj Gusain</text>
+  <text x="120" y="225" font-family="'SF Mono', Monaco, 'Cascadia Code', monospace" font-size="22" fill="#8B8B93">Principal Software Engineer</text>
+  <text x="120" y="265" font-family="'SF Mono', Monaco, 'Cascadia Code', monospace" font-size="18" fill="#A78BFA">PHP · Golang · Node.js · Fintech</text>
+</svg>
