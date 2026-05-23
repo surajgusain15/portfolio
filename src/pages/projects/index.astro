@@ -7,6 +7,7 @@ import TerminalWindow from "../../components/ui/TerminalWindow.astro";
 import GlowCard from "../../components/ui/GlowCard.astro";
 import { getCollection } from "astro:content";
 
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const projects = await getCollection("projects");
 projects.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 const slug = (id: string) => id.replace(/\.mdx$/, "");
@@ -33,7 +34,7 @@ const slug = (id: string) => id.replace(/\.mdx$/, "");
       <div class="grid md:grid-cols-2 gap-6">
         {projects.map((project, i) => (
           <ScrollReveal delay={i * 100}>
-            <a href={`/projects/${slug(project.id)}`} class="block group">
+            <a href={`${base}projects/${slug(project.id)}`} class="block group">
               <GlowCard>
                 <TerminalWindow title={project.data.subtitle}>
                   <p class="text-[0.8125rem] text-text-primary font-medium mb-2">

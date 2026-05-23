@@ -4,9 +4,8 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  // If not using a custom domain, change to:
-  site: "https://surajgusain.github.io",
-  base: "/",
+  site: "https://surajgusain15.github.io",
+  base: "/portfolio",
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
