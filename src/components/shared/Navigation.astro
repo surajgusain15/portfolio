@@ -1,9 +1,10 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const links = [
-  { href: "/projects", label: "Projects" },
-  { href: "/#stack", label: "Stack" },
-  { href: "/#experience", label: "Experience" },
-  { href: "/#contact", label: "Contact" },
+  { href: `${base}projects`, label: "Projects" },
+  { href: `${base}#stack`, label: "Stack" },
+  { href: `${base}#experience`, label: "Experience" },
+  { href: `${base}#contact`, label: "Contact" },
 ];
 ---
 
@@ -11,7 +12,7 @@ const links = [
   <div class="absolute inset-0 bg-bg/80 backdrop-blur-xl border-b border-border/50" />
 
   <div class="container-main relative flex items-center justify-between h-16">
-    <a href="/" class="font-mono text-sm text-text-primary hover:text-accent transition-colors">
+    <a href={base} class="font-mono text-sm text-text-primary hover:text-accent transition-colors">
       ~/suraj
     </a>
 
@@ -25,7 +26,7 @@ const links = [
         </a>
       ))}
       <a
-        href="/#contact"
+        href={`${base}#contact`}
         class="px-4 py-1.5 font-mono text-xs text-bg bg-accent rounded-md hover:brightness-110 transition-all"
       >
         Hire me
@@ -56,7 +57,7 @@ const links = [
       ))}
       <hr class="border-border" />
       <a
-        href="/#contact"
+        href={`${base}#contact`}
         class="px-6 py-3 bg-accent text-bg font-semibold rounded-lg text-center hover:brightness-110 transition-all"
         data-menu-close
       >
